@@ -1,0 +1,139 @@
+<div class="explorer-container">
+
+  <!-- Header -->
+  <header class="topbar">
+
+    <button class="icon-btn">
+      ☰
+    </button>
+
+    <h1>Explorar</h1>
+
+    <button class="icon-btn">
+      🔔
+    </button>
+
+  </header>
+
+  <!-- Search -->
+
+  <div class="search-container" routerLink="/search">
+
+    <input
+      type="text"
+      placeholder="Buscar libros, autores, géneros..."
+    />
+
+  </div>
+
+  <!-- Recomendados -->
+
+  <section class="section">
+
+    <div class="section-header">
+      <h2>Recomendados para ti</h2>
+      <a href="#">Ver más</a>
+    </div>
+
+    <div class="books-scroll">
+
+      <div class="book">
+        <img src="https://covers.openlibrary.org/b/isbn/9780735211292-M.jpg">
+      </div>
+
+      <div class="book">
+        <img src="https://covers.openlibrary.org/b/isbn/9780062316097-M.jpg">
+      </div>
+
+      <div class="book">
+        <img src="https://covers.openlibrary.org/b/isbn/9780451524935-M.jpg">
+      </div>
+
+      <div class="book">
+        <img src="https://covers.openlibrary.org/b/isbn/9780547928227-M.jpg">
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- Categorias -->
+
+  <section class="section">
+
+    <div class="section-header">
+      <h2>Categorías</h2>
+      <a href="#">Ver más</a>
+    </div>
+
+    <div class="categories">
+
+      <button>Ficción</button>
+      <button>Historia</button>
+      <button>Ciencia</button>
+      <button>Autoayuda</button>
+      <button>Romance</button>
+      <button>Misterio</button>
+
+    </div>
+
+  </section>
+
+  <!-- Novedades -->
+
+  <section class="section">
+
+    <div class="section-header">
+      <h2>Novedades</h2>
+      <a href="#">Ver más</a>
+    </div>
+
+    <div class="books-scroll">
+
+      <div class="book">
+        <img src="https://covers.openlibrary.org/b/isbn/9780140449136-M.jpg">
+      </div>
+
+      <div class="book">
+        <img src="https://covers.openlibrary.org/b/isbn/9780141439600-M.jpg">
+      </div>
+
+      <div class="book">
+        <img src="https://covers.openlibrary.org/b/isbn/9780307277671-M.jpg">
+      </div>
+
+      <div class="book">
+        <img src="https://covers.openlibrary.org/b/isbn/9780307474278-M.jpg">
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- Bottom Nav -->
+
+  <nav class="bottom-nav">
+
+    <button class="active">
+      🏠
+      <span>Inicio</span>
+    </button>
+
+    <button routerLink="/library">
+      📚
+      <span>Biblioteca</span>
+    </button>
+
+    <button routerLink="/favorites">
+      ❤️
+      <span>Favoritos</span>
+    </button>
+
+    <button routerLink="/profile">
+      👤
+      <span>Perfil</span>
+    </button>
+
+  </nav>
+
+</div>

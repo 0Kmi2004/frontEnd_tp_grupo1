@@ -1,0 +1,193 @@
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Segoe UI',sans-serif;
+}
+
+.library-container{
+  min-height:100vh;
+  background:#fff;
+  padding-bottom:80px;
+}
+
+/* HEADER */
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  padding:20px;
+}
+
+.topbar h1{
+  font-size:22px;
+  color:#222;
+}
+
+.icon-btn{
+  border:none;
+  background:none;
+
+  font-size:22px;
+  cursor:pointer;
+}
+
+.placeholder{
+  width:22px;
+}
+
+/* TABS */
+
+.tabs{
+  display:flex;
+  justify-content:space-around;
+
+  border-bottom:1px solid #eee;
+
+  margin-bottom:20px;
+}
+
+.tabs button{
+  border:none;
+  background:none;
+
+  padding:15px 0;
+
+  color:#777;
+  cursor:pointer;
+
+  font-size:13px;
+}
+
+.tabs .active{
+  color:#7C4DFF;
+  font-weight:600;
+
+  border-bottom:3px solid #7C4DFF;
+}
+
+/* LIBROS */
+
+.books-list{
+  padding:0 16px;
+}
+
+.book-item{
+  display:flex;
+  gap:14px;
+
+  margin-bottom:22px;
+}
+
+.book-item img{
+  width:60px;
+  height:85px;
+
+  border-radius:8px;
+
+  object-fit:cover;
+}
+
+.book-info{
+  flex:1;
+}
+
+.book-info h3{
+  font-size:15px;
+  color:#222;
+
+  margin-bottom:4px;
+}
+
+.book-info p{
+  font-size:13px;
+  color:#777;
+
+  margin-bottom:10px;
+}
+
+.progress-text{
+  display:block;
+
+  color:#7C4DFF;
+  font-size:13px;
+
+  margin-bottom:5px;
+}
+
+.progress-bar{
+  width:100%;
+  height:6px;
+
+  background:#e5e5e5;
+
+  border-radius:10px;
+
+  overflow:hidden;
+}
+
+.progress{
+  height:100%;
+  background:#7C4DFF;
+}
+
+.progress-30{
+  width:30%;
+}
+
+.progress-52{
+  width:52%;
+}
+
+.progress-75{
+  width:75%;
+}
+
+.progress-100{
+  width:100%;
+}
+
+/* NAVBAR */
+
+.bottom-nav{
+  position:fixed;
+
+  left:0;
+  right:0;
+  bottom:0;
+
+  height:70px;
+
+  background:white;
+
+  border-top:1px solid #ececec;
+
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+}
+
+.bottom-nav button{
+  border:none;
+  background:none;
+
+  display:flex;
+  flex-direction:column;
+
+  gap:4px;
+
+  color:#777;
+
+  cursor:pointer;
+}
+
+.bottom-nav button span{
+  font-size:12px;
+}
+
+.active-nav{
+  color:#7C4DFF !important;
+  font-weight:600;
+}
