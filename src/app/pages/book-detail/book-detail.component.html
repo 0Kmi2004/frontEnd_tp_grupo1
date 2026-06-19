@@ -1,11 +1,11 @@
-<div class="detail-container">
+<div *ngIf="book" class="detail-container">
 
   <!-- Header -->
 
   <div class="topbar">
 
-    <button class="icon-btn">
-      ←
+    <button class="icon-btn" onclick="history.back()">
+      <img src="/arrow.png" alt="" width="15px">
     </button>
 
     <button class="icon-btn">
@@ -20,16 +20,16 @@
 
     <img
       class="book-cover"
-      src="https://covers.openlibrary.org/b/isbn/9780735211292-M.jpg"
-      alt="Hábitos Atómicos"
+      [src]="'https://covers.openlibrary.org/b/id/' + book.covers?.[0] + '-L.jpg'"
+      [alt]="book.title"
     />
 
     <div class="book-info">
 
-      <h1>Hábitos Atómicos</h1>
+      <h1>{{ book.title }}</h1>
 
       <p class="author">
-        James Clear
+        {{ authorName }}
       </p>
 
       <div class="rating">
@@ -39,7 +39,7 @@
       </div>
 
       <span class="category">
-        Autoayuda
+        {{ book.subjects?.[0] || 'General' }}
       </span>
 
     </div>
@@ -48,17 +48,17 @@
 
   <!-- Acciones -->
 
-  <button class="read-btn">
+  <button class="read-btn" (click)="leerLibro()">
     Leer ahora
   </button>
 
   <div class="actions">
 
-    <button class="secondary-btn">
+    <button class="secondary-btn" (click)="agregarFavorito()">
       Añadir a favoritos
     </button>
 
-    <button class="secondary-btn">
+    <button class="secondary-btn" (click)="agregarBiblioteca()">
       Añadir a mi biblioteca
     </button>
 
@@ -71,8 +71,7 @@
     <h2>Descripción</h2>
 
     <p>
-      Un método fácil y comprobado para desarrollar buenos hábitos y eliminar los malos.
-      Pequeños cambios, resultados extraordinarios.
+      {{ description }}   
     </p>
 
   </section>
@@ -91,18 +90,18 @@
       </div>
 
       <div class="info-item">
-        <span>Idioma:</span>
-        <strong>Español</strong>
+        <span>Última revisión:</span>
+        <strong>{{ book.latest_revision }}</strong>
       </div>
 
       <div class="info-item">
-        <span>Formato:</span>
-        <strong>PDF</strong>
+        <span>Categoría:</span>
+        <strong>{{ book.subjects?.[0] || 'General' }}</strong>
       </div>
 
       <div class="info-item">
-        <span>Editorial:</span>
-        <strong>Diana</strong>
+        <span>Temas:</span>
+        <strong class="category">{{ getSubjects() }}</strong>
       </div>
 
     </div>

@@ -9,9 +9,14 @@
     </button>
 
     <input
+      #searchInput
       type="text"
       placeholder="Buscar libros"
+      
     />
+    <button class="back-btn" (click)="buscar(searchInput.value)">
+      <img src="/lupa.png" alt="" width="20px"  >
+    </button>
 
   </div>
 
@@ -41,18 +46,20 @@
 
   <div class="results">
 
-    <div class="result-item">
+    <div class="result-item" *ngFor="let book of books">
 
       <img
-        src="https://covers.openlibrary.org/b/isbn/9788478884452-M.jpg"
-        alt="Harry Potter"
+        *ngIf="book.cover_i"
+        [src]="'https://covers.openlibrary.org/b/id/' + book.cover_i + '-L.jpg'"
+        [alt]="book.title"
+        class="book-cover"
       >
 
       <div class="book-info">
 
-        <h3>Harry Potter y la piedra filosofal</h3>
+        <h3>{{ book.title }}</h3>
 
-        <p>J. K. Rowling</p>
+        <p>{{ book.author_name?.[0] || 'Desconocido' }}</p>
 
         <span class="rating">
           4.8 ★★★★★
@@ -60,7 +67,7 @@
 
       </div>
 
-      <button class="menu-btn">
+      <button class="menu-btn" [routerLink]="['/book', book.key.replace('/works/', '')]">
         ⋮
       </button>
 
