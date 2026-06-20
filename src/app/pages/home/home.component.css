@@ -99,6 +99,17 @@
 
 .book{
   flex:none;
+  cursor: pointer;
+  
+}
+
+
+.book-title {
+  margin-top: 8px;
+  font-size: 0.85rem;
+  text-align: center;
+  font-weight: 500;
+  width: 90px;
 }
 
 .book img{
