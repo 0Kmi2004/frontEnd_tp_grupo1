@@ -1,27 +1,17 @@
 <div class="favorites-container">
-
-  <!-- Header -->
-
   <header class="topbar">
-
-    <button
-      class="icon-btn"
-      onclick="history.back()">
-
+    <button class="icon-btn" onclick="history.back()">
       <img
         src="/arrow.png"
         alt=""
         width="15">
-
     </button>
 
     <h1>Mis favoritos</h1>
 
-    <div class="placeholder"></div>
+
 
   </header>
-
-  <!-- Lista -->
 
   <div class="favorites-list">
 
@@ -37,41 +27,24 @@
         class="book-info"
         [routerLink]="['/book', book.key.replace('/works/', '')]">
 
-        <h3>
-          {{ book.title }}
-        </h3>
+        <h3>{{ book.title }}</h3>
 
-        <p>
-          {{ book.author_name?.[0] || 'Autor desconocido' }}
-        </p>
+        <p>{{ book.author_name?.[0] || 'Autor desconocido' }}</p>
 
         <div class="rating">
 
-          <span>
-            {{ book.rating }}
-          </span>
+          <span>{{ book.rating }}</span>
 
-          <span class="stars">
-            ★★★★★
-          </span>
+          <span class="stars">★★★★★</span>
 
         </div>
-
       </div>
 
-      <button
-        class="menu-btn"
-        (click)="removeFavorite(i)">
-
-        ✕
-
-      </button>
+      <button class="menu-btn" (click)="removeFavorite(i)">✕</button>
 
     </div>
 
   </div>
-
-  <!-- Mensaje vacío -->
 
   <div
     class="empty-state"
@@ -79,13 +52,9 @@
 
     <h3>No tienes favoritos</h3>
 
-    <p>
-      Agrega libros a favoritos para verlos aquí.
-    </p>
+    <p>Agrega libros a favoritos para verlos aquí.</p>
 
   </div>
-
-  <!-- Bottom Navigation -->
 
   <nav class="bottom-nav">
 

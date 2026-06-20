@@ -14,8 +14,19 @@ import { BookService } from '../../services/book.service';
   styleUrl: './home.component.css'
 })
 export class HomeComponent implements OnInit{
+
+  menuOpen = false;
+
   recommendedBooks: any[] = [];
   newBooks: any[] = [];
+
+  toggleMenu(): void {
+    this.menuOpen = !this.menuOpen;
+  }
+
+  closeMenu(): void {
+    this.menuOpen = false;
+  }
 
   constructor(private bookService: BookService) {}
 

@@ -11,13 +11,11 @@
   padding-bottom:80px;
 }
 
-/* HEADER */
-
 .topbar{
   display:flex;
-  justify-content:space-between;
+  justify-content:start;
+  gap: 5em;
   align-items:center;
-
   padding:20px;
 }
 
@@ -29,7 +27,6 @@
 .icon-btn{
   border:none;
   background:none;
-
   font-size:22px;
   cursor:pointer;
 }
@@ -37,8 +34,6 @@
 .placeholder{
   width:22px;
 }
-
-/* LISTA */
 
 .favorites-list{
   padding:0 16px;
@@ -48,20 +43,15 @@
   display:flex;
   align-items:flex-start;
   gap:14px;
-
   padding:14px 0;
-
   border-bottom:1px solid #f1f1f1;
 }
 
 .favorite-item img{
   width:60px;
   height:85px;
-
   border-radius:8px;
-
   object-fit:cover;
-
   box-shadow:0 3px 8px rgba(0,0,0,.08);
 }
 
@@ -72,14 +62,12 @@
 .book-info h3{
   font-size:15px;
   color:#222;
-
   margin-bottom:4px;
 }
 
 .book-info p{
   font-size:13px;
   color:#777;
-
   margin-bottom:8px;
 }
 
@@ -87,7 +75,6 @@
   display:flex;
   align-items:center;
   gap:5px;
-
   font-size:13px;
 }
 
@@ -98,28 +85,20 @@
 .menu-btn{
   border:none;
   background:none;
-
   font-size:22px;
   color:#777;
-    align-self: center;
+  align-self: center;
   cursor:pointer;
 }
 
-/* BOTTOM NAV */
-
 .bottom-nav{
   position:fixed;
-
   left:0;
   right:0;
   bottom:0;
-
   height:70px;
-
   background:white;
-
   border-top:1px solid #ececec;
-
   display:flex;
   justify-content:space-around;
   align-items:center;
@@ -128,15 +107,11 @@
 .bottom-nav button{
   border:none;
   background:none;
-
   display:flex;
   flex-direction:column;
-
   align-items:center;
   gap:4px;
-
   color:#777;
-
   cursor:pointer;
 }
 

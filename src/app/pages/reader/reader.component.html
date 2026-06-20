@@ -1,36 +1,32 @@
-<div class="reader-container">
-
-  <!-- Header -->
+<div class="reader-container"
+  [class.dark]="darkMode">
 
   <header class="reader-header">
 
-    <button class="icon-btn">
+    <button class="icon-btn" onclick="history.back()">
       <img src="/arrow.png" alt="" width="15px">
     </button>
 
-    <h1>Hábitos atómicos</h1>
+    <h1>{{ book?.title || 'Cargando...' }}</h1>
 
     <div class="header-actions">
 
-      <button class="icon-btn">
+      <button class="icon-btn" (click)="aumentarFuente()">
         Aa
       </button>
 
       <button class="icon-btn">
         ⋮
       </button>
-
     </div>
-
   </header>
 
-  <!-- Contenido -->
-
-  <main class="reader-content">
+    <main
+    class="reader-content"
+    [ngStyle]="{'font-size.px': fontSize}">
 
     <h2>
-      1. Pequeños cambios,
-      resultados extraordinarios
+      Capítulo 1
     </h2>
 
     <p>
@@ -64,9 +60,16 @@
 
     <div class="progress-bar">
 
-      <div class="progress"></div>
+      <div
+        class="progress"
+        [style.width.%]="progress">
+      </div>
 
     </div>
+
+    <span class="progress-text">
+      {{ progress }}%
+    </span>
 
   </div>
 
@@ -74,16 +77,24 @@
 
   <footer class="reader-toolbar">
 
-    <button>
-      ☰
+    <button
+      (click)="avanzarLectura()">
+
+      📖
+
+    </button>
+
+    <button
+      (click)="toggleDarkMode()">
+
+      🌙
+
     </button>
 
     <button>
-      ☀
-    </button>
 
-    <button>
       🔖
+
     </button>
 
   </footer>

@@ -8,18 +8,14 @@
 .reader-container{
   min-height:100vh;
   background:#fff;
-
   display:flex;
   flex-direction:column;
 }
-
-/* HEADER */
 
 .reader-header{
   display:flex;
   justify-content:space-between;
   align-items:center;
-
   padding:20px;
 }
 
@@ -28,7 +24,6 @@
   font-weight:600;
   color:#222;
  padding-left: 1em;
-
 }
 
 .header-actions{
@@ -40,44 +35,31 @@
 .icon-btn{
   border:none;
   background:none;
-    padding: 0 .5em;
+  padding: 0 .5em;
   font-size:18px;
   cursor:pointer;
-
   color:#444;
 }
 
-/* CONTENIDO */
-
 .reader-content{
   flex:1;
-
   padding:3em 2em;
-
   overflow-y:auto;
-
-
 }
 
 .reader-content h2{
   font-size:22px;
   font-weight:700;
-
   color:#222;
-
   margin-bottom:24px;
 }
 
 .reader-content p{
   font-size:18px;
   color:#444;
-
   margin-bottom:24px;
-
   text-align:left;
 }
-
-/* PROGRESO */
 
 .progress-container{
   padding:0 20px 15px;
@@ -86,32 +68,23 @@
 .progress-bar{
   width:100%;
   height:4px;
-
   background:#e5e5e5;
-
   border-radius:10px;
-
   overflow:hidden;
 }
 
 .progress{
   width:28%;
   height:100%;
-
   background:#7C4DFF;
 }
 
-/* TOOLBAR */
-
 .reader-toolbar{
   height:65px;
-
   border-top:1px solid #eee;
-
   display:flex;
   justify-content:space-around;
   align-items:center;
-
   background:#fff;
 }
 
@@ -122,6 +95,5 @@
   font-size:22px;
 
   cursor:pointer;
-
   color:#555;
 }

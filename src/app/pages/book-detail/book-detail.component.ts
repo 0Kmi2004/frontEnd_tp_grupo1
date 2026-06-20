@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { BookService } from '../../services/book.service';
 
 @Component({
@@ -8,7 +8,7 @@ import { BookService } from '../../services/book.service';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './book-detail.component.html',
-  styleUrl: './book-detail.component.css'
+  styleUrls: ['./book-detail.component.css']
 })
 export class BookDetailComponent implements OnInit {
 
@@ -16,8 +16,12 @@ export class BookDetailComponent implements OnInit {
   authorName = 'Autor desconocido';
   description = 'No hay descripción disponible.';
 
+  // ID del libro para enviarlo al Reader
+  bookId = '';
+
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private bookService: BookService,
     private location: Location
   ) {}
@@ -27,6 +31,9 @@ export class BookDetailComponent implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
 
     if (!id) return;
+
+    // Guardamos el ID para usarlo después
+    this.bookId = id;
 
     this.bookService
       .getBookDetails(`/works/${id}`)
@@ -87,15 +94,24 @@ export class BookDetailComponent implements OnInit {
   }
 
   leerLibro(): void {
-    console.log('Abrir lector');
+
+    this.router.navigate([
+      '/reader',
+      this.bookId
+    ]);
+
   }
 
   getSubjects(): string {
+
     if (!this.book?.subjects?.length) {
       return 'General';
     }
 
-    return this.book.subjects.slice(0, 5).join(', ');
+    return this.book.subjects
+      .slice(0, 5)
+      .join(', ');
+
   }
 
 }

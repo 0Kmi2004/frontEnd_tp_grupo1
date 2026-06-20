@@ -1,7 +1,5 @@
 <div class="profile-container">
 
-  <!-- Header -->
-
   <div class="profile-header">
 
     <button class="settings-btn">
@@ -10,27 +8,23 @@
 
     <img
       class="avatar"
-      src="https://i.pravatar.cc/200"
-      alt="Usuario"
+      [src]="avatarUrl"
+      [alt]="user.name"
     >
 
-    <h2>Juan Pérez</h2>
+    <h2>{{ user.name }}</h2>
 
-    <p>juanperez&#64;gmail.com</p>
+    <p>{{ user.email }}</p>
 
   </div>
 
-  <!-- Tarjeta principal -->
-
   <div class="profile-card">
-
-    <!-- Estadísticas -->
 
     <div class="stats">
 
       <div class="stat">
-        <h3>12</h3>
-        <span>Libros leídos</span>
+        <h3>{{ user.booksRead }}</h3>
+        <span>Favoritos</span>
       </div>
 
       <div class="stat">
@@ -44,8 +38,6 @@
       </div>
 
     </div>
-
-    <!-- Menú -->
 
     <div class="menu">
 
@@ -82,8 +74,6 @@
     </div>
 
   </div>
-
-  <!-- Navegación inferior -->
 
   <nav class="bottom-nav">
 
