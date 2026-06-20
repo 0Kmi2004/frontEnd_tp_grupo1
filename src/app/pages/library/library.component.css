@@ -191,3 +191,26 @@
   color:#7C4DFF !important;
   font-weight:600;
 }
+
+.status-badge {
+  display: inline-block;
+  margin: 6px 0;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  background: #eef2ff;
+}
+
+.progress {
+  height: 100%;
+  background: #4f46e5;
+  border-radius: inherit;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 10px;
+  overflow: hidden;
+}

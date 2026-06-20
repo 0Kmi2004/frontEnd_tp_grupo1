@@ -1,10 +1,8 @@
 <div class="library-container">
 
-  <!-- Header -->
-
   <header class="topbar">
 
-    <button class="icon-btn">
+    <button class="icon-btn" (click)="loadBooks()">
       ↻
     </button>
 
@@ -18,130 +16,67 @@
 
   <div class="tabs">
 
-    <button class="active">
+    <button
+      [class.active]="activeTab === 'Todos'"
+      (click)="setTab('Todos')">
       Todos
     </button>
 
-    <button >
+    <button
+      [class.active]="activeTab === 'Leyendo'"
+      (click)="setTab('Leyendo')">
       Leyendo
     </button>
 
-    <button >
+    <button
+      [class.active]="activeTab === 'Completados'"
+      (click)="setTab('Completados')">
       Completados
     </button>
 
-    <button >
+    <button
+      [class.active]="activeTab === 'Pendientes'"
+      (click)="setTab('Pendientes')">
       Pendientes
     </button>
 
   </div>
 
-  <!-- Lista de libros -->
+  <!-- Libros -->
 
   <div class="books-list">
 
-    <!-- Libro -->
-
-    <div class="book-item">
+    <div
+      class="book-item"
+      *ngFor="let book of filteredBooks">
 
       <img
-        src="https://covers.openlibrary.org/b/isbn/9780735211292-M.jpg"
-        alt="Hábitos Atómicos"
-      />
+        [src]="getCover(book)"
+        [alt]="book.title">
 
       <div class="book-info">
 
-        <h3>Hábitos Atómicos</h3>
+        <h3>{{ book.title }}</h3>
 
-        <p>James Clear</p>
+        <p>
+          {{ book.author_name?.[0] || 'Autor desconocido' }}
+        </p>
+
+        <span class="status-badge">
+          {{ book.status }}
+        </span>
 
         <span class="progress-text">
-          52%
+          {{ book.progress }}%
         </span>
 
         <div class="progress-bar">
-          <div class="progress progress-52"></div>
-        </div>
 
-      </div>
+          <div
+            class="progress"
+            [style.width.%]="book.progress">
+          </div>
 
-    </div>
-
-    <!-- Libro -->
-
-    <div class="book-item">
-
-      <img
-        src="https://covers.openlibrary.org/b/isbn/9780062316097-M.jpg"
-        alt="Sapiens"
-      />
-
-      <div class="book-info">
-
-        <h3>Sapiens: De animales a dioses</h3>
-
-        <p>Yuval Noah Harari</p>
-
-        <span class="progress-text">
-          100%
-        </span>
-
-        <div class="progress-bar">
-          <div class="progress progress-100"></div>
-        </div>
-
-      </div>
-
-    </div>
-
-    <!-- Libro -->
-
-    <div class="book-item">
-
-      <img
-        src="https://covers.openlibrary.org/b/isbn/9780451524935-M.jpg"
-        alt="1984"
-      />
-
-      <div class="book-info">
-
-        <h3>1984</h3>
-
-        <p>George Orwell</p>
-
-        <span class="progress-text">
-          75%
-        </span>
-
-        <div class="progress-bar">
-          <div class="progress progress-75"></div>
-        </div>
-
-      </div>
-
-    </div>
-
-    <!-- Libro -->
-
-    <div class="book-item">
-
-      <img
-        src="https://covers.openlibrary.org/b/isbn/9780156012195-M.jpg"
-        alt="El Principito"
-      />
-
-      <div class="book-info">
-
-        <h3>El Principito</h3>
-
-        <p>Antoine de Saint-Exupéry</p>
-
-        <span class="progress-text">
-          30%
-        </span>
-
-        <div class="progress-bar">
-          <div class="progress progress-30"></div>
         </div>
 
       </div>
@@ -150,7 +85,7 @@
 
   </div>
 
-  <!-- Bottom Navigation -->
+  <!-- Bottom Nav -->
 
   <nav class="bottom-nav">
 
