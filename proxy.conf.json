@@ -1,0 +1,11 @@
+{
+  "/gutenberg": {
+    "target": "https://www.gutenberg.org",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/gutenberg": ""
+    }
+  }
+}

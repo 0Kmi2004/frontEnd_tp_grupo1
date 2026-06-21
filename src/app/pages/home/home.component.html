@@ -60,26 +60,27 @@
   </div>
 
   <section class="section">
-
+  
     <div class="section-header">
       <h2>Recomendados para ti</h2>
       <a href="#">Ver más</a>
-    </div>
-
-    <div class="books-scroll">
-
-      <div 
-      class="book"
-      *ngFor="let book of recommendedBooks"
-      [routerLink]="['/book', book.key.replace('/works/', '')]">
-        <img [src]="'https://covers.openlibrary.org/b/id/' + book.cover_i + '-M.jpg'"
-        [alt]="book.title">
-        <p class="book-title">
-          {{ book.title }}
-        </p>
       </div>
-
-    </div>
+      
+      <div class="books-scroll">
+      
+        <div *ngFor="let book of books">
+      
+          <button [routerLink]="['/reader', book.id]" class="book-button" [state]="book" (click)="openBook(book)">
+      
+            <div class="portada"><img [src]="book.formats['image/jpeg']" width="120"></div>
+      
+            <h3 class="book-title"><span>{{ book.title }} </span></h3>
+      
+          </button>
+      
+        </div>
+      
+      </div>
 
   </section>
 
