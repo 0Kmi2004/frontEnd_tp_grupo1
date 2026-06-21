@@ -50,4 +50,14 @@ export class HomeComponent implements OnInit{
 
   }
 
+  selectedCategory: string | null = null;
+
+  selectCategory(category: string): void {
+  this.selectedCategory = category;
+
+  this.bookService.getBooksByCategory(category).subscribe((response: any) => {
+    this.recommendedBooks = response.docs;
+  });
+}
+
 }

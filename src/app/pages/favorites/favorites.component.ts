@@ -25,37 +25,32 @@ export class FavoritesComponent implements OnInit {
 
   loadFavorites(): void {
 
-    this.bookService
-      .searchBooks('popular')
-      .subscribe((response: any) => {
+  this.favoriteBooks = JSON.parse(
+    localStorage.getItem('favorites') || '[]'
+  );
 
-        this.favoriteBooks = response.docs
-          .slice(0, 8)
-          .map((book: any) => ({
+}
+removeFavorite(index: number): void {
 
-            ...book,
+  this.favoriteBooks.splice(index, 1);
 
-            rating: (
-              4 + Math.random()
-            ).toFixed(1)
+  localStorage.setItem(
+    'favorites',
+    JSON.stringify(this.favoriteBooks)
+  );
 
-          }));
+}
 
-      });
+getCover(book: any): string {
 
+  if (book.covers?.length) {
+    return `https://covers.openlibrary.org/b/id/${book.covers[0]}-M.jpg`;
   }
 
-  removeFavorite(index: number): void {
-    this.favoriteBooks.splice(index, 1);
-  }
-
-  getCover(book: any): string {
-
-    if (!book.cover_i) {
-      return 'https://via.placeholder.com/120x180?text=Libro';
-    }
-
+  if (book.cover_i) {
     return `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`;
   }
 
+  return 'https://via.placeholder.com/120x180?text=Libro';
+}
 }

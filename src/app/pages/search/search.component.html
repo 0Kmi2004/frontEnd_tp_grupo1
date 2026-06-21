@@ -24,19 +24,19 @@
 
   <div class="tabs">
 
-    <button class="active">
+    <button [class.active]="selectedTab === 'all'" (click)="setTab('all')">
       Todos
     </button>
 
-    <button>
+    <button [class.active]="selectedTab === 'books'" (click)="setTab('books')">
       Libros
     </button>
 
-    <button>
+    <button [class.active]="selectedTab === 'authors'" (click)="setTab('authors')">
       Autores
     </button>
 
-    <button>
+    <button [class.active]="selectedTab === 'genres'" (click)="setTab('genres')">
       Géneros
     </button>
 
