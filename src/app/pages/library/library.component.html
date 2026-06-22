@@ -1,50 +1,25 @@
 <div class="library-container">
 
   <header class="topbar">
-
-    <button class="icon-btn" (click)="loadBooks()">
-      ↻
-    </button>
-
+    <button class="icon-btn" (click)="loadBooks()">↻</button>
     <h1>Mi biblioteca</h1>
-
     <div class="placeholder"></div>
-
   </header>
 
   <div class="tabs">
-
-    <button
-      [class.active]="activeTab === 'Todos'"
-      (click)="setTab('Todos')">
-      Todos
-    </button>
-
-    <button
-      [class.active]="activeTab === 'Leyendo'"
-      (click)="setTab('Leyendo')">
-      Leyendo
-    </button>
-
-    <button
-      [class.active]="activeTab === 'Completados'"
-      (click)="setTab('Completados')">
-      Completados
-    </button>
-
-    <button
-      [class.active]="activeTab === 'Pendientes'"
-      (click)="setTab('Pendientes')">
-      Pendientes
-    </button>
-
+    <button [class.active]="activeTab === 'Todos'" (click)="setTab('Todos')">Todos</button>
+    <button [class.active]="activeTab === 'Leyendo'" (click)="setTab('Leyendo')">Leyendo</button>
+    <button [class.active]="activeTab === 'Completados'" (click)="setTab('Completados')">Completados</button>
+    <button [class.active]="activeTab === 'Pendientes'" (click)="setTab('Pendientes')">Pendientes</button>
   </div>
 
   <div class="books-list">
 
     <div
       class="book-item"
-      *ngFor="let book of filteredBooks">
+      *ngFor="let book of filteredBooks"
+      style="cursor: pointer;"
+      [routerLink]="['/reader', book.key.replace('/works/', '')]">
 
       <img
         [src]="getCover(book)"
@@ -58,7 +33,6 @@
           {{ book.author_name?.[0] || 'Autor desconocido' }}
         </p>
         
-
         <span class="status-badge">
           {{ book.status }}
         </span>
@@ -68,7 +42,6 @@
         </span>
 
         <div class="progress-bar">
-
           <div
             class="progress"
             [style.width.%]="book.progress">
@@ -79,26 +52,22 @@
   </div>
 
   <nav class="bottom-nav">
-
     <button routerLink="/home">
       🏠
       <span>Inicio</span>
     </button>
-
     <button class="active-nav">
       📚
       <span>Biblioteca</span>
     </button>
-
     <button routerLink="/favorites">
       ❤️
       <span>Favoritos</span>
     </button>
-
     <button routerLink="/profile">
       👤
       <span>Perfil</span>
     </button>
-
   </nav>
+
 </div>

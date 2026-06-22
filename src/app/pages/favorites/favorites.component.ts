@@ -24,33 +24,15 @@ export class FavoritesComponent implements OnInit {
   }
 
   loadFavorites(): void {
-
-  this.favoriteBooks = JSON.parse(
-    localStorage.getItem('favorites') || '[]'
-  );
-
-}
-removeFavorite(index: number): void {
-
-  this.favoriteBooks.splice(index, 1);
-
-  localStorage.setItem(
-    'favorites',
-    JSON.stringify(this.favoriteBooks)
-  );
-
-}
-
-getCover(book: any): string {
-
-  if (book.covers?.length) {
-    return `https://covers.openlibrary.org/b/id/${book.covers[0]}-M.jpg`;
+    this.favoriteBooks = this.bookService.getFavorites();
   }
 
-  if (book.cover_i) {
-    return `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`;
+  removeFavorite(index: number): void {
+    this.bookService.removeFavorite(index);
+    this.loadFavorites();
   }
 
-  return 'https://via.placeholder.com/120x180?text=Libro';
-}
+  getCover(book: any): string {
+    return this.bookService.getCoverUrl(book.cover_i || (book.covers ? book.covers[0] : null));
+  }
 }

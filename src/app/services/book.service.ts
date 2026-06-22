@@ -10,65 +10,81 @@ export class BookService {
 
   constructor(private http: HttpClient) {}
 
-  // Buscar libros por texto
   searchBooks(query: string): Observable<any> {
-    return this.http.get<any>(
-      `${this.searchUrl}?q=${encodeURIComponent(query)}`,
-    );
+    return this.http.get<any>(`${this.searchUrl}?q=${encodeURIComponent(query)}`);
   }
 
-  // Obtener detalle de un libro
   getBookDetails(workKey: string): Observable<any> {
     return this.http.get<any>(`https://openlibrary.org${workKey}.json`);
   }
 
-  // Obtener información del autor
   getAuthor(authorKey: string): Observable<any> {
     return this.http.get<any>(`https://openlibrary.org${authorKey}.json`);
   }
 
-  // Libros recomendados
   getRecommendedBooks(): Observable<any> {
     return this.http.get<any>(`${this.searchUrl}?q=bestseller&limit=12`);
   }
 
-  // Novedades
   getNewBooks(): Observable<any> {
     return this.http.get<any>(`${this.searchUrl}?q=technology&limit=12`);
   }
 
-  // Buscar por categoría
   getBooksByCategory(category: string) {
-    return this.http.get<any>(
-      `https://openlibrary.org/search.json?subject=${category}`,
-    );
+    return this.http.get<any>(`https://openlibrary.org/search.json?subject=${category}`);
   }
 
-  // Libros populares de una categoría
   getPopularCategory(category: string): Observable<any> {
-    return this.http.get<any>(
-      `${this.searchUrl}?subject=${encodeURIComponent(category)}&sort=rating&limit=12`,
-    );
+    return this.http.get<any>(`${this.searchUrl}?subject=${encodeURIComponent(category)}&sort=rating&limit=12`);
   }
 
-  // Obtener portada
   getCoverUrl(coverId: number): string {
     if (!coverId) {
       return 'https://via.placeholder.com/150x220?text=Sin+Portada';
     }
-
     return `https://covers.openlibrary.org/b/id/${coverId}-L.jpg`;
   }
 
   searchAuthors(query: string) {
-    return this.http.get<any>(
-      `https://openlibrary.org/search/authors.json?q=${query}`,
-    );
+    return this.http.get<any>(`https://openlibrary.org/search/authors.json?q=${query}`);
   }
 
   searchBySubject(subject: string) {
-    return this.http.get<any>(
-      `https://openlibrary.org/search.json?subject=${subject}`,
-    );
+    return this.http.get<any>(`https://openlibrary.org/search.json?subject=${subject}`);
+  }
+
+  getFavorites(): any[] {
+    return JSON.parse(localStorage.getItem('favoritos') || '[]');
+  }
+
+  addFavorite(book: any): void {
+    let favs = this.getFavorites();
+    if (!favs.find(f => f.key === book.key)) {
+      favs.push(book);
+      localStorage.setItem('favoritos', JSON.stringify(favs));
+    }
+  }
+
+  removeFavorite(index: number): void {
+    let favs = this.getFavorites();
+    favs.splice(index, 1);
+    localStorage.setItem('favoritos', JSON.stringify(favs));
+  }
+
+  getLibrary(): any[] {
+    return JSON.parse(localStorage.getItem('biblioteca') || '[]');
+  }
+
+  addToLibrary(book: any, status: string = 'Pendientes'): void {
+    let lib = this.getLibrary();
+    if (!lib.find(b => b.key === book.key)) {
+      const bookForLibrary = { 
+        ...book, 
+        status: status, 
+        progress: 0 
+      };
+      lib.push(bookForLibrary);
+      localStorage.setItem('biblioteca', JSON.stringify(lib));
+    }
   }
 }

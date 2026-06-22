@@ -16,9 +16,7 @@ import { BookService } from '../../services/book.service';
 export class LibraryComponent implements OnInit {
 
   activeTab = 'Todos';
-
   allBooks: any[] = [];
-
   filteredBooks: any[] = [];
 
   constructor(private bookService: BookService) {}
@@ -28,31 +26,11 @@ export class LibraryComponent implements OnInit {
   }
 
   loadBooks(): void {
-
-    this.bookService
-      .searchBooks('bestseller')
-      .subscribe((response: any) => {
-
-        this.allBooks = response.docs
-          .slice(0, 12)
-          .map((book: any, index: number) => ({
-
-            ...book,
-
-            progress: this.generateProgress(index),
-
-            status: this.generateStatus(index)
-
-          }));
-
-        this.filteredBooks = [...this.allBooks];
-
-      });
-
+    this.allBooks = this.bookService.getLibrary();
+    this.setTab(this.activeTab);
   }
 
   setTab(tab: string): void {
-
     this.activeTab = tab;
 
     if (tab === 'Todos') {
@@ -65,31 +43,13 @@ export class LibraryComponent implements OnInit {
     );
   }
 
-  generateProgress(index: number): number {
-
-    const values = [15, 30, 45, 52, 68, 75, 90, 100];
-
-    return values[index % values.length];
-  }
-
-  generateStatus(index: number): string {
-
-    const statuses = [
-      'Leyendo',
-      'Pendientes',
-      'Completados'
-    ];
-
-    return statuses[index % statuses.length];
-  }
-
   getCover(book: any): string {
-
-    if (!book.cover_i) {
-      return 'https://via.placeholder.com/120x180?text=Libro';
+    if (book.covers?.length) {
+      return `https://covers.openlibrary.org/b/id/${book.covers[0]}-M.jpg`;
     }
-
-    return `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`;
+    if (book.cover_i) {
+      return `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`;
+    }
+    return 'https://via.placeholder.com/120x180?text=Libro';
   }
-
 }
