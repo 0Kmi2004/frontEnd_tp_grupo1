@@ -1,25 +1,48 @@
 <div class="library-container">
 
   <header class="topbar">
-    <button class="icon-btn" (click)="loadBooks()">↻</button>
+
+    <button class="icon-btn" (click)="loadLibrary()">↻</button>
+
     <h1>Mi biblioteca</h1>
-    <div class="placeholder"></div>
+
+
+
   </header>
 
   <div class="tabs">
-    <button [class.active]="activeTab === 'Todos'" (click)="setTab('Todos')">Todos</button>
-    <button [class.active]="activeTab === 'Leyendo'" (click)="setTab('Leyendo')">Leyendo</button>
-    <button [class.active]="activeTab === 'Completados'" (click)="setTab('Completados')">Completados</button>
-    <button [class.active]="activeTab === 'Pendientes'" (click)="setTab('Pendientes')">Pendientes</button>
+
+    <button
+      [class.active]="activeTab === 'Todos'"
+      (click)="setTab('Todos')">
+      Todos
+    </button>
+
+    <button
+      [class.active]="activeTab === 'Leyendo'"
+      (click)="setTab('Leyendo')">
+      Leyendo
+    </button>
+
+    <button
+      [class.active]="activeTab === 'Completados'"
+      (click)="setTab('Completados')">
+      Completados
+    </button>
+
+    <button
+      [class.active]="activeTab === 'Pendientes'"
+      (click)="setTab('Pendientes')">
+      Pendientes
+    </button>
+
   </div>
 
   <div class="books-list">
 
     <div
       class="book-item"
-      *ngFor="let book of filteredBooks"
-      style="cursor: pointer;"
-      [routerLink]="['/reader', book.key.replace('/works/', '')]">
+      *ngFor="let book of libraryBooks; let i = index">
 
       <img
         [src]="getCover(book)"
@@ -33,6 +56,7 @@
           {{ book.author_name?.[0] || 'Autor desconocido' }}
         </p>
         
+
         <span class="status-badge">
           {{ book.status }}
         </span>
@@ -40,34 +64,50 @@
         <span class="progress-text">
           {{ book.progress }}%
         </span>
-
         <div class="progress-bar">
+
           <div
             class="progress"
             [style.width.%]="book.progress">
           </div>
         </div>
+        
       </div>
+      <button class="menu-btn" (click)="removeBook(i)">✕</button>
     </div>
   </div>
 
+    <div
+    class="empty-state"
+    *ngIf="libraryBooks.length === 0">
+
+    <h3>No tienes libros</h3>
+
+    <p>Agrega libros a biblioteca para verlos aquí.</p>
+
+  </div>
+
   <nav class="bottom-nav">
+
     <button routerLink="/home">
       🏠
       <span>Inicio</span>
     </button>
+
     <button class="active-nav">
       📚
       <span>Biblioteca</span>
     </button>
+
     <button routerLink="/favorites">
       ❤️
       <span>Favoritos</span>
     </button>
+
     <button routerLink="/profile">
       👤
       <span>Perfil</span>
     </button>
-  </nav>
 
+  </nav>
 </div>

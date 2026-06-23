@@ -6,15 +6,11 @@ import { BookService } from '../../services/book.service';
 @Component({
   selector: 'app-favorites',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterLink
-  ],
+  imports: [CommonModule, RouterLink],
   templateUrl: './favorites.component.html',
-  styleUrls: ['./favorites.component.css']
+  styleUrls: ['./favorites.component.css'],
 })
 export class FavoritesComponent implements OnInit {
-
   favoriteBooks: any[] = [];
 
   constructor(private bookService: BookService) {}
@@ -24,15 +20,23 @@ export class FavoritesComponent implements OnInit {
   }
 
   loadFavorites(): void {
-    this.favoriteBooks = this.bookService.getFavorites();
+    this.favoriteBooks = JSON.parse(localStorage.getItem('favorites') || '[]');
   }
-
   removeFavorite(index: number): void {
-    this.bookService.removeFavorite(index);
-    this.loadFavorites();
+    this.favoriteBooks.splice(index, 1);
+
+    localStorage.setItem('favorites', JSON.stringify(this.favoriteBooks));
   }
 
   getCover(book: any): string {
-    return this.bookService.getCoverUrl(book.cover_i || (book.covers ? book.covers[0] : null));
+    if (book.covers?.length) {
+      return `https://covers.openlibrary.org/b/id/${book.covers[0]}-M.jpg`;
+    }
+
+    if (book.cover_i) {
+      return `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`;
+    }
+
+    return 'https://via.placeholder.com/120x180?text=Libro';
   }
 }

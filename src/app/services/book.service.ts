@@ -11,7 +11,9 @@ export class BookService {
   constructor(private http: HttpClient) {}
 
   searchBooks(query: string): Observable<any> {
-    return this.http.get<any>(`${this.searchUrl}?q=${encodeURIComponent(query)}`);
+    return this.http.get<any>(
+      `${this.searchUrl}?q=${encodeURIComponent(query)}`,
+    );
   }
 
   getBookDetails(workKey: string): Observable<any> {
@@ -31,11 +33,15 @@ export class BookService {
   }
 
   getBooksByCategory(category: string) {
-    return this.http.get<any>(`https://openlibrary.org/search.json?subject=${category}`);
+    return this.http.get<any>(
+      `https://openlibrary.org/search.json?subject=${category}`,
+    );
   }
 
   getPopularCategory(category: string): Observable<any> {
-    return this.http.get<any>(`${this.searchUrl}?subject=${encodeURIComponent(category)}&sort=rating&limit=12`);
+    return this.http.get<any>(
+      `${this.searchUrl}?subject=${encodeURIComponent(category)}&sort=rating&limit=12`,
+    );
   }
 
   getCoverUrl(coverId: number): string {
@@ -46,11 +52,15 @@ export class BookService {
   }
 
   searchAuthors(query: string) {
-    return this.http.get<any>(`https://openlibrary.org/search/authors.json?q=${query}`);
+    return this.http.get<any>(
+      `https://openlibrary.org/search/authors.json?q=${query}`,
+    );
   }
 
   searchBySubject(subject: string) {
-    return this.http.get<any>(`https://openlibrary.org/search.json?subject=${subject}`);
+    return this.http.get<any>(
+      `https://openlibrary.org/search.json?subject=${subject}`,
+    );
   }
 
   getFavorites(): any[] {
@@ -59,16 +69,16 @@ export class BookService {
 
   addFavorite(book: any): void {
     let favs = this.getFavorites();
-    if (!favs.find(f => f.key === book.key)) {
+    if (!favs.find((f) => f.key === book.key)) {
       favs.push(book);
-      localStorage.setItem('favoritos', JSON.stringify(favs));
+      localStorage.setItem('favorites', JSON.stringify(favs));
     }
   }
 
   removeFavorite(index: number): void {
     let favs = this.getFavorites();
     favs.splice(index, 1);
-    localStorage.setItem('favoritos', JSON.stringify(favs));
+    localStorage.setItem('favorites', JSON.stringify(favs));
   }
 
   getLibrary(): any[] {
@@ -77,14 +87,18 @@ export class BookService {
 
   addToLibrary(book: any, status: string = 'Pendientes'): void {
     let lib = this.getLibrary();
-    if (!lib.find(b => b.key === book.key)) {
-      const bookForLibrary = { 
-        ...book, 
-        status: status, 
-        progress: 0 
+    if (!lib.find((b) => b.key === book.key)) {
+      const bookForLibrary = {
+        ...book,
+        status: status,
+        progress: 0,
       };
       lib.push(bookForLibrary);
       localStorage.setItem('biblioteca', JSON.stringify(lib));
     }
+  }
+
+  getEdition(editionKey: string) {
+    return this.http.get(`https://openlibrary.org/books/${editionKey}.json`);
   }
 }

@@ -8,12 +8,12 @@ import { BookService } from '../../services/book.service';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './reader.component.html',
-  styleUrls: ['./reader.component.css']
+  styleUrls: ['./reader.component.css'],
 })
 export class ReaderComponent implements OnInit {
-
   book: any = null;
-  authorName = 'Autor desconocido';
+  description = 'Cargando...';
+  title = '';
 
   progress = 35;
   fontSize = 18;
@@ -36,43 +36,37 @@ export class ReaderComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private bookService: BookService,
-    private location: Location
+    private location: Location,
   ) {}
 
   ngOnInit(): void {
-
     const id = this.route.snapshot.paramMap.get('id');
 
     if (!id) return;
 
-    const savedProgress = localStorage.getItem(`reader-${id}`);
-
-    if (savedProgress) {
-      this.progress = Number(savedProgress);
-    }
-
-    this.bookService
-      .getBookDetails(`/works/${id}`)
-      .subscribe((data: any) => {
-
+    this.bookService.getBookDetails(`/works/${id}`).subscribe({
+      next: (data: any) => {
+        console.log('Libro cargado:', data);
         this.book = data;
 
-        if (data.authors?.length) {
-
-          const authorKey = data.authors[0].author.key;
-
-          this.bookService
-            .getAuthor(authorKey)
-            .subscribe((author: any) => {
-
-              this.authorName = author.name;
-
-            });
-
+        if (typeof data.description === 'object') {
+          this.description = data.description.value;
+        } else if (typeof data.description === 'string') {
+          this.description = data.description;
         }
 
-      });
+        if (typeof data.title === 'object') {
+          this.title = data.title.value;
+        } else if (typeof data.title === 'string') {
+          this.title = data.title;
+        }
 
+      },
+
+      error: (error) => {
+        console.error('Error al obtener el libro:', error);
+      },
+    });
   }
 
   volver(): void {
@@ -80,49 +74,22 @@ export class ReaderComponent implements OnInit {
   }
 
   aumentarFuente(): void {
-
     if (this.fontSize < 28) {
       this.fontSize += 2;
     }
-
-  }
-
-  disminuirFuente(): void {
-
-    if (this.fontSize > 14) {
-      this.fontSize -= 2;
-    }
-
-  }
-
-  toggleDarkMode(): void {
-    this.darkMode = !this.darkMode;
-  }
-
-  avanzarLectura(): void {
-
-    if (this.progress < 100) {
-
-      this.progress += 5;
-
-      const id = this.route.snapshot.paramMap.get('id');
-
-      localStorage.setItem(
-        `reader-${id}`,
-        this.progress.toString()
-      );
-
-    }
-
   }
 
   getCover(): string {
-
     if (!this.book?.covers?.[0]) {
       return 'https://via.placeholder.com/200x300?text=Libro';
     }
-
     return `https://covers.openlibrary.org/b/id/${this.book.covers[0]}-L.jpg`;
   }
 
+  obtenerLibro(): void {
+    if (!this.book) return;
+
+    const titulo = encodeURIComponent(this.book.title);
+    window.open(`https://openlibrary.org/search?q=${titulo}`, '_blank');
+  }
 }

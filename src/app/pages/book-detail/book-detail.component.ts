@@ -43,7 +43,6 @@ export class BookDetailComponent implements OnInit {
         } else if (typeof data.description === 'string') {
           this.description = data.description;
         }
-
         // Autor
         if (data.authors?.length > 0) {
           const authorKey = data.authors[0].author.key;
@@ -69,7 +68,6 @@ export class BookDetailComponent implements OnInit {
   volver(): void {
     this.location.back();
   }
-
 
   leerLibro(): void {
     this.router.navigate(['/reader', this.bookId]);
@@ -107,7 +105,7 @@ export class BookDetailComponent implements OnInit {
   agregarBiblioteca(): void {
     if (!this.book) return;
 
-    const biblioteca = JSON.parse(localStorage.getItem('library') || '[]');
+    const biblioteca = JSON.parse(localStorage.getItem('biblioteca') || '[]');
 
     const existe = biblioteca.find((b: any) => b.key === this.book.key);
 
@@ -115,13 +113,15 @@ export class BookDetailComponent implements OnInit {
       biblioteca.push({
         ...this.book,
         authorName: this.authorName,
-      });
+      },'Pendientes');
 
-      localStorage.setItem('library', JSON.stringify(biblioteca));
+      localStorage.setItem('biblioteca', JSON.stringify(biblioteca));
 
-      alert('Libro agregado a tu biblioteca');
+      alert('Libro agregado a biblioteca');
     } else {
-      alert('El libro ya está en tu biblioteca');
+      alert('El libro ya está en biblioteca');
     }
   }
+
+  
 }

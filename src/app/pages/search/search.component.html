@@ -21,7 +21,7 @@
     <button [class.active]="selectedTab === 'all'" (click)="setTab('all')">Todos</button>
     <button [class.active]="selectedTab === 'books'" (click)="setTab('books')">Libros</button>
     <button [class.active]="selectedTab === 'authors'" (click)="setTab('authors')">Autores</button>
-    <button [class.active]="selectedTab === 'genres'" (click)="setTab('genres')">Géneros</button>
+    <button [class.active]="selectedTab === 'subject'" (click)="setTab('subject')">Géneros</button>
   </div>
 
   <div class="results">
@@ -29,35 +29,33 @@
       <p>Buscá un título, autor o género para empezar.</p>
     </div>
 
-    <div class="result-item" *ngFor="let book of books">
+    <div class="result-item" *ngFor="let book of books" [routerLink]="['/book', book.key.replace('/works/', '')]">
       <img
-        [src]="book.cover_i ? 'https://covers.openlibrary.org/b/id/' + book.cover_i + '-M.jpg' : 'https://via.placeholder.com/120x180?text=Sin+Portada'"
+        [src]="book.cover_i ? 'https://covers.openlibrary.org/b/id/' + book.cover_i + '-M.jpg' : '/portadavacia.png'"
         [alt]="book.title"
         class="book-cover"
         [routerLink]="['/book', book.key.replace('/works/', '')]"
         style="cursor: pointer;"
       >
 
-      <div class="book-info">
-        <h3>{{ book.title }}</h3>
-        <p>{{ book.author_name?.[0] || 'Desconocido' }}</p>
-        <span class="rating">
-          {{ getRating(book) }}
-        </span>
-
-        <div class="action-buttons" style="margin-top: 10px; display: flex; gap: 10px;">
-          <button (click)="agregarAFavoritos(book)" style="padding: 5px 10px; cursor: pointer; background: transparent; border: 1px solid #ccc; border-radius: 4px;">
+      <div>
+        <div class="book-info">
+          <h3>{{ book.title }}</h3>
+          <p>{{ book.author_name?.[0] || 'Desconocido' }}</p>
+        </div>
+      
+        <div>
+          <span class="rating">
+            {{ getRating(book) }}
+          </span>
+          <button (click)="agregarAFavoritos(book)" class="añadir-btn">
             ❤️
           </button>
-          <button (click)="agregarABiblioteca(book)" style="padding: 5px 10px; cursor: pointer; background: transparent; border: 1px solid #ccc; border-radius: 4px;">
+          <button (click)="agregarABiblioteca(book)" class="añadir-btn">
             ➕ Biblioteca
           </button>
         </div>
       </div>
-
-      <button class="menu-btn" [routerLink]="['/book', book.key.replace('/works/', '')]">
-        ⋮
-      </button>
     </div>
   </div>
 

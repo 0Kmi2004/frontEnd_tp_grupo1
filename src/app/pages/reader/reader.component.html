@@ -3,21 +3,19 @@
 
   <header class="reader-header">
 
-    <button class="icon-btn" onclick="history.back()">
+    <button class="icon-btn" (click)="volver()">
       <img src="/arrow.png" alt="" width="15px">
     </button>
 
-    <h1>{{ book?.title || 'Cargando...' }}</h1>
+    <h1>Lector</h1>
 
     <div class="header-actions">
 
       <button class="icon-btn" (click)="aumentarFuente()">
-        Aa
+        A
       </button>
 
-      <button class="icon-btn">
-        ⋮
-      </button>
+
     </div>
   </header>
 
@@ -25,7 +23,7 @@
     class="reader-content"
     [ngStyle]="{'font-size.px': fontSize}">
 
-    <h2>{{ book?.title ? 'Sinopsis / Fragmento' : 'Cargando...' }}</h2>
+    <h2>{{ title  }}</h2>
 
     <ng-container *ngIf="book?.description; else textoDemo">
       <p>
@@ -35,54 +33,16 @@
 
     <ng-template #textoDemo>
       <p style="white-space: pre-line;">
-        {{ demoContent }}
+        {{ description }}
       </p>
     </ng-template>
 
   </main>
 
 
-  <div class="progress-container">
 
-    <div class="progress-bar">
-
-      <div
-        class="progress"
-        [style.width.%]="progress">
-      </div>
-
-    </div>
-
-    <span class="progress-text">
-      {{ progress }}%
-    </span>
-
-  </div>
 
   <!-- Toolbar -->
 
-  <footer class="reader-toolbar">
-
-    <button
-      (click)="avanzarLectura()">
-
-      📖
-
-    </button>
-
-    <button
-      (click)="toggleDarkMode()">
-
-      🌙
-
-    </button>
-
-    <button>
-
-      🔖
-
-    </button>
-
-  </footer>
-
+  <button class="buy-btn" (click)="obtenerLibro()">Obtener libro</button>
 </div>
