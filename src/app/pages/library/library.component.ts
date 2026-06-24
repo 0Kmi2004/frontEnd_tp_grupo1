@@ -11,45 +11,20 @@ import { BookService } from '../../services/book.service';
   styleUrls: ['./library.component.css'],
 })
 export class LibraryComponent implements OnInit {
-  activeTab = 'Todos';
-
-  allBooks: any[] = [];
-
-  filteredBooks: any[] = [];
+  libraryBooks: any[] = [];
 
   constructor(private bookService: BookService) {}
-
-  libraryBooks: any[] = [];
 
   ngOnInit(): void {
     this.loadLibrary();
   }
 
-  loadLibrary(): void {
-    this.libraryBooks = JSON.parse(localStorage.getItem('biblioteca') || '[]');
-  }
-
-  setTab(tab: string): void {
-    this.activeTab = tab;
-
-    if (tab === 'Todos') {
-      this.filteredBooks = [...this.allBooks];
-      return;
-    }
-
-    this.filteredBooks = this.allBooks.filter((book) => book.status === tab);
-  }
-
-  generateProgress(index: number): number {
-    const values = [15, 30, 45, 52, 68, 75, 90, 100];
-
-    return values[index % values.length];
-  }
-
-  generateStatus(index: number): string {
-    const statuses = ['Leyendo', 'Pendientes', 'Completados'];
-
-    return statuses[index % statuses.length];
+loadLibrary(): void {
+    const savedBooks = JSON.parse(localStorage.getItem('biblioteca') || '[]');
+    
+    this.libraryBooks = savedBooks.filter((book: any) => book && book.title);
+    
+    localStorage.setItem('biblioteca', JSON.stringify(this.libraryBooks));
   }
 
   getCover(book: any): string {
@@ -66,7 +41,6 @@ export class LibraryComponent implements OnInit {
 
   removeBook(index: number): void {
     this.libraryBooks.splice(index, 1);
-
     localStorage.setItem('biblioteca', JSON.stringify(this.libraryBooks));
   }
 }

@@ -1,82 +1,29 @@
 <div class="profile-container">
 
   <div class="profile-header">
-
-    <button class="settings-btn">
-      ⚙
-    </button>
-
+    <button class="settings-btn">⚙</button>
+    
     <img
       class="avatar"
       [src]="avatarUrl"
       [alt]="user.name"
     >
-
+    
     <h2>{{ user.name }}</h2>
-
     <p>{{ user.email }}</p>
-
   </div>
 
   <div class="profile-card">
-
-    <div class="stats">
-
-      <div class="stat">
-        <h3>{{ user.booksRead }}</h3>
-        <span>Favoritos</span>
-      </div>
-
-      <div class="stat">
-        <h3>8</h3>
-        <span>En progreso</span>
-      </div>
-
-      <div class="stat">
-        <h3>24</h3>
-        <span>Favoritos</span>
-      </div>
-
-    </div>
-
     <div class="menu">
-
-      <div class="menu-item">
-        <span>👤 </span><span>Información personal</span>
-        <span>›</span>
-      </div>
-
-      <div class="menu-item">
-        <span>🔒 </span><span>Seguridad</span>
-        <span>›</span>
-      </div>
-
-      <div class="menu-item">
-        <span>🔔 </span><span>Notificaciones</span>
-        <span>›</span>
-      </div>
-
-      <div class="menu-item">
-        <span>⚙ </span><span>Preferencias</span>
-        <span>›</span>
-      </div>
-
-      <div class="menu-item">
-        <span>❓ </span><span>Ayuda y soporte</span>
-        <span>›</span>
-      </div>
-
-      <div class="menu-item logout">
+      <div class="menu-item logout" (click)="cerrarSesion()" style="cursor: pointer;">
         <span>↩ </span><span>Cerrar sesión</span>
         <span>›</span>
       </div>
-
     </div>
 
   </div>
 
   <nav class="bottom-nav">
-
     <button routerLink="/home">
       <div>🏠</div>
       <span>Inicio</span>
@@ -84,19 +31,13 @@
 
     <button routerLink="/library">
       <div>📚</div>
-      <span>Biblioteca</span>
-    </button>
-
-    <button routerLink="/favorites">
-      <div>❤️</div>
-      <span>Favoritos</span>
+      <span>Libros leidos</span>
     </button>
 
     <button class="active-nav">
       <div>👤</div>
       <span>Perfil</span>
     </button>
-
   </nav>
 
 </div>

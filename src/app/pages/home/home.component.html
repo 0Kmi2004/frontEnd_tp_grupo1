@@ -9,9 +9,6 @@
 
     <h1>Explorar</h1>
 
-    <button class="icon-btn">
-      🔔
-    </button>
 
   </header>
 
@@ -36,11 +33,7 @@
       </a>
   
       <a routerLink="/library" (click)="closeMenu()">
-        📚 Mi Biblioteca
-      </a>
-  
-      <a routerLink="/favorites" (click)="closeMenu()">
-        ❤️ Favoritos
+        📚 Libros leidos
       </a>
   
       <a routerLink="/profile" (click)="closeMenu()">
@@ -62,8 +55,26 @@
   <section class="section">
 
     <div class="section-header">
+      <h2>Categorías</h2>
+    </div>
+
+    <div class="categories">
+
+      <button (click)="selectCategory('ficcion')">Ficción</button>
+      <button (click)="selectCategory('historia')">Historia</button>
+      <button (click)="selectCategory('ciencia')">Ciencia</button>
+      <button (click)="selectCategory('autoayuda')">Autoayuda</button>
+      <button (click)="selectCategory('romance')">Romance</button>
+      <button (click)="selectCategory('misterio')">Misterio</button>
+
+    </div>
+
+  </section>
+
+  <section class="section">
+
+    <div class="section-header">
       <h2>Recomendados para ti</h2>
-      <a href="#">Ver más</a>
     </div>
 
     <div class="books-scroll">
@@ -86,28 +97,7 @@
   <section class="section">
 
     <div class="section-header">
-      <h2>Categorías</h2>
-      <a href="#">Ver más</a>
-    </div>
-
-    <div class="categories">
-
-      <button (click)="selectCategory('ficcion')">Ficción</button>
-      <button (click)="selectCategory('historia')">Historia</button>
-      <button (click)="selectCategory('ciencia')">Ciencia</button>
-      <button (click)="selectCategory('autoayuda')">Autoayuda</button>
-      <button (click)="selectCategory('romance')">Romance</button>
-      <button (click)="selectCategory('misterio')">Misterio</button>
-
-    </div>
-
-  </section>
-
-  <section class="section">
-
-    <div class="section-header">
       <h2>Novedades</h2>
-      <a href="#">Ver más</a>
     </div>
 
     <div class="books-scroll">
@@ -136,12 +126,7 @@
 
     <button routerLink="/library">
       📚
-      <span>Biblioteca</span>
-    </button>
-
-    <button routerLink="/favorites">
-      ❤️
-      <span>Favoritos</span>
+      <span>Libros Leidos</span>
     </button>
 
     <button routerLink="/profile">

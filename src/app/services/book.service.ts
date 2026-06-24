@@ -20,6 +20,10 @@ export class BookService {
     return this.http.get<any>(`https://openlibrary.org${workKey}.json`);
   }
 
+  getBookRatings(workId: string) {
+    return this.http.get(`https://openlibrary.org${workId}/ratings.json`);
+  }
+
   getAuthor(authorKey: string): Observable<any> {
     return this.http.get<any>(`https://openlibrary.org${authorKey}.json`);
   }
@@ -61,24 +65,6 @@ export class BookService {
     return this.http.get<any>(
       `https://openlibrary.org/search.json?subject=${subject}`,
     );
-  }
-
-  getFavorites(): any[] {
-    return JSON.parse(localStorage.getItem('favoritos') || '[]');
-  }
-
-  addFavorite(book: any): void {
-    let favs = this.getFavorites();
-    if (!favs.find((f) => f.key === book.key)) {
-      favs.push(book);
-      localStorage.setItem('favorites', JSON.stringify(favs));
-    }
-  }
-
-  removeFavorite(index: number): void {
-    let favs = this.getFavorites();
-    favs.splice(index, 1);
-    localStorage.setItem('favorites', JSON.stringify(favs));
   }
 
   getLibrary(): any[] {

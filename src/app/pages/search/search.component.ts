@@ -23,7 +23,6 @@ export class SearchComponent {
 
   constructor(private bookService: BookService) {}
 
-  // 🔎 BÚSQUEDA
   buscar(texto: string): void {
 
     this.terminoBusqueda = texto;
@@ -39,7 +38,6 @@ export class SearchComponent {
 
         this.allBooks = response.docs || [];
 
-        // 🔥 ENRIQUECER CON SUBJECTS REALES
         this.allBooks.forEach(book => {
 
           if (!book.key) return;
@@ -58,13 +56,11 @@ export class SearchComponent {
       });
   }
 
-  // 🎯 TAB
   setTab(tab: 'all' | 'books' | 'authors' | 'subject'): void {
     this.selectedTab = tab;
     this.aplicarFiltros();
   }
 
-  // 🧠 FILTROS COMBINADOS
   aplicarFiltros(): void {
 
     const texto = this.terminoBusqueda.toLowerCase();
@@ -75,7 +71,6 @@ export class SearchComponent {
         ? book.subjects
         : [];
 
-      // 🔎 MATCH TEXTO
       const matchesText =
         book.title?.toLowerCase().includes(texto) ||
         book.author_name?.join(' ')?.toLowerCase().includes(texto) ||
@@ -83,14 +78,12 @@ export class SearchComponent {
           s.toLowerCase().includes(texto)
         );
 
-      // 🎯 MATCH CATEGORÍA
       const matchesCategory =
         !this.selectedCategory ||
         subjects.some((s: string) =>
           s.toLowerCase().includes(this.selectedCategory.toLowerCase())
         );
 
-      // 🧭 TAB LOGIC
       let matchesTab = true;
 
       if (this.selectedTab === 'authors') {
@@ -110,34 +103,13 @@ export class SearchComponent {
     });
   }
 
-  // 🎯 FILTRO POR CATEGORÍA
   filtrarPorCategoria(categoria: string): void {
     this.selectedCategory = categoria;
     this.aplicarFiltros();
   }
 
-  // ❤️ FAVORITOS
-  agregarAFavoritos(book: any): void {
-    this.bookService.addFavorite(book);
-    alert('¡Agregado a favoritos! ❤️');
-  }
-
-  // 📚 BIBLIOTECA
   agregarABiblioteca(book: any): void {
     this.bookService.addToLibrary(book, 'Pendientes');
-    alert('¡Agregado a tu biblioteca! 📚');
-  }
-
-  // ⭐ RATING
-  getRating(book: any): string {
-
-    if (book.ratings_average) {
-      return (Math.round(book.ratings_average * 10) / 10).toFixed(1) + ' ★';
-    }
-
-    const tituloLength = book.title ? book.title.length : 10;
-    const ratingSimulado = (tituloLength % 16) + 35;
-
-    return (ratingSimulado / 10).toFixed(1) + ' ★';
+    alert('¡Agregado a libros leidos! 📚');
   }
 }

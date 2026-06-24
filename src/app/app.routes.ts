@@ -24,14 +24,6 @@ export const routes: Routes = [
   },
 
   {
-    path: 'register',
-    loadComponent: () =>
-      import('./pages/register/register.component').then(
-        (m) => m.RegisterComponent
-      )
-  },
-
-  {
     path: 'home',
     loadComponent: () =>
       import('./pages/home/home.component').then(
@@ -60,22 +52,6 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/library/library.component').then(
         (m) => m.LibraryComponent
-      )
-  },
-
-  {
-    path: 'reader/:id',
-    loadComponent: () =>
-      import('./pages/reader/reader.component').then(
-        (m) => m.ReaderComponent
-      )
-  },
-
-  {
-    path: 'favorites',
-    loadComponent: () =>
-      import('./pages/favorites/favorites.component').then(
-        (m) => m.FavoritesComponent
       )
   },
 
