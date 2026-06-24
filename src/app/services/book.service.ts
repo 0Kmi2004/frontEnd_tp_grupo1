@@ -20,10 +20,6 @@ export class BookService {
     return this.http.get<any>(`https://openlibrary.org${workKey}.json`);
   }
 
-  getBookRatings(workId: string) {
-    return this.http.get(`https://openlibrary.org${workId}/ratings.json`);
-  }
-
   getAuthor(authorKey: string): Observable<any> {
     return this.http.get<any>(`https://openlibrary.org${authorKey}.json`);
   }
@@ -65,6 +61,10 @@ export class BookService {
     return this.http.get<any>(
       `https://openlibrary.org/search.json?subject=${subject}`,
     );
+  }
+
+   getBookRatings(workId: string) {
+    return this.http.get(`https://openlibrary.org${workId}/ratings.json`);
   }
 
   getLibrary(): any[] {

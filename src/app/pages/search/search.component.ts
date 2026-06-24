@@ -110,6 +110,7 @@ export class SearchComponent {
 
   agregarABiblioteca(book: any): void {
     this.bookService.addToLibrary(book, 'Pendientes');
-    alert('¡Agregado a libros leidos! 📚');
+    alert('¡Agregado a tu biblioteca! 📚');
   }
+
 }
