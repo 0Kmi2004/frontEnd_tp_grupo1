@@ -21,21 +21,14 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
     const currentUser = localStorage.getItem('currentUser');
-
-    if (!currentUser) {
-      this.router.navigate(['/login']);
-      return;
+    if (currentUser) {
+      this.user = {
+        name: currentUser.charAt(0).toUpperCase() + currentUser.slice(1),
+        email: `${currentUser}@correo.com`,
+      };
     }
 
-    const nombreFormateado = currentUser.charAt(0).toUpperCase() + currentUser.slice(1);
-
-    this.user = {
-      name: nombreFormateado,
-      email: `${currentUser}@correo.com`,
-    };
-
-    const storageKey = `biblioteca_${currentUser}`;
-    const biblioteca = JSON.parse(localStorage.getItem(storageKey) || '[]');
+    const biblioteca = JSON.parse(localStorage.getItem('biblioteca') || '[]');
     this.totalLibros = biblioteca.length;
   }
 
