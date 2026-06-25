@@ -1,20 +1,15 @@
-import { Component,OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { CommonModule  } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { BookService } from '../../services/book.service';
-
 
 @Component({
   selector: 'app-home',
-  imports: [
-    RouterLink,
-    CommonModule
-  ],
+  imports: [RouterLink, CommonModule],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  styleUrl: './home.component.css',
 })
-export class HomeComponent implements OnInit{
-
+export class HomeComponent implements OnInit {
   menuOpen = false;
 
   recommendedBooks: any[] = [];
@@ -31,33 +26,34 @@ export class HomeComponent implements OnInit{
   constructor(private bookService: BookService) {}
 
   ngOnInit(): void {
+    this.bookService.getRecommendedBooks().subscribe({
+      next: (response: any) => {
+        console.log('Recommended OK', response);
+        this.recommendedBooks = response.docs || [];
+      },
+      error: (err) => {
+        console.error('Recommended ERROR', err);
+      },
+    });
 
-    this.bookService
-      .getRecommendedBooks()
-      .subscribe((response: any) => {
-
-        this.recommendedBooks = response.docs;
-
-      });
-
-    this.bookService
-      .getNewBooks()
-      .subscribe((response: any) => {
-
-        this.newBooks = response.docs;
-
-      });
-
+    this.bookService.getNewBooks().subscribe({
+      next: (response: any) => {
+        console.log('NewBooks OK', response);
+        this.newBooks = response.docs || [];
+      },
+      error: (err) => {
+        console.error('NewBooks ERROR', err);
+      },
+    });
   }
 
   selectedCategory: string | null = null;
 
   selectCategory(category: string): void {
-  this.selectedCategory = category;
+    this.selectedCategory = category;
 
-  this.bookService.getBooksByCategory(category).subscribe((response: any) => {
-    this.recommendedBooks = response.docs;
-  });
-}
-
+    this.bookService.getBooksByCategory(category).subscribe((response: any) => {
+      this.recommendedBooks = response.docs;
+    });
+  }
 }
