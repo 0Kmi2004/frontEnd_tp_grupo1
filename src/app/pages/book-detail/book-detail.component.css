@@ -62,8 +62,6 @@
   flex-direction: column;
 }
 
-
-
 .stars{
   color:#f5b301;
 }
@@ -80,7 +78,8 @@
   color:#7C4DFF;
   border-radius:8px;
   font-size:13px;
-  width: 70%;
+  max-width: 70%;
+  width: fit-content;
 }
 
 .read-btn{
