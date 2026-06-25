@@ -16,7 +16,7 @@ export class SearchComponent {
   selectedTab: 'all' | 'books' | 'authors' | 'subject' = 'all';
 
   terminoBusqueda: string = '';
-  selectedCategory: string = '';
+
 
   allBooks: any[] = [];
   books: any[] = [];
@@ -99,9 +99,7 @@ export class SearchComponent {
     });
   }
 
-  filtrarPorCategoria(categoria: string): void {
-    this.selectedCategory = categoria;
-  }
+
 
   agregarABiblioteca(book: any): void {
     this.bookService.addToLibrary(book, 'Pendientes');

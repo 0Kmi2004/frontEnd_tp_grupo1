@@ -34,19 +34,19 @@ export class BookDetailComponent implements OnInit {
         this.book = data;
 
         this.bookService.getBookRatings(`/works/${id}`).subscribe({
-  next: (ratingData: any) => {
-    if (ratingData && ratingData.summary) {
-      this.ratingAverage = ratingData.summary.average 
-        ? parseFloat(ratingData.summary.average.toFixed(1)) 
-        : 0;
-      
-      this.ratingCount = ratingData.summary.count || 0;
-    }
-  },
-  error: () => {
-    console.log('No se encontraron calificaciones para este libro.');
-  }
-});
+          next: (ratingData: any) => {
+            if (ratingData && ratingData.summary) {
+              this.ratingAverage = ratingData.summary.average
+                ? parseFloat(ratingData.summary.average.toFixed(1))
+                : 0;
+
+              this.ratingCount = ratingData.summary.count || 0;
+            }
+          },
+          error: () => {
+            console.log('No se encontraron calificaciones para este libro.');
+          },
+        });
 
         if (typeof data.description === 'object') {
           this.description = data.description.value;
@@ -102,5 +102,11 @@ export class BookDetailComponent implements OnInit {
     } else {
       alert('El libro ya está en biblioteca');
     }
+  }
+
+  obtenerLibro(): void {
+    if (!this.book) return;
+    const titulo = encodeURIComponent(this.book.title);
+    window.open(`https://openlibrary.org/search?q=${titulo}`, '_blank');
   }
 }
