@@ -1,79 +1,187 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { Observable, catchError, map, of, retry, timer } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BookService {
-  private searchUrl = 'https://openlibrary.org/search.json';
+  private baseUrl = 'https://www.googleapis.com/books/v1/volumes';
+  private apiKey = environment.googleBooksApiKey;
 
   constructor(private http: HttpClient) {}
 
+  private buildParams(customParams: Record<string, string>): HttpParams {
+    let params = new HttpParams();
+    Object.keys(customParams).forEach((key) => {
+      params = params.set(key, customParams[key]);
+    });
+
+    if (this.apiKey && this.apiKey.trim() !== '') {
+      params = params.set('key', this.apiKey);
+    }
+
+    return params;
+  }
+
+  private get retryStrategy() {
+    return retry({
+      count: 2,
+      delay: (error: HttpErrorResponse, retryCount: number) => {
+        if (error.status === 0 || error.status >= 500) {
+          return timer(retryCount * 1000);
+        }
+        throw error;
+      },
+    });
+  }
+
+  private adaptGoogleBook(item: any): any {
+    if (!item) return null;
+    const info = item.volumeInfo || {};
+
+    let coverUrl = info.imageLinks?.thumbnail || info.imageLinks?.smallThumbnail || '';
+    if (coverUrl.startsWith('http://')) {
+      coverUrl = coverUrl.replace('http://', 'https://');
+    }
+
+    return {
+      key: item.id,
+      title: info.title || 'Título desconocido',
+      author_name: info.authors || ['Autor desconocido'],
+      cover_i: coverUrl || 'assets/no-cover.png',
+      first_publish_year: info.publishedDate ? info.publishedDate.substring(0, 4) : 'N/A',
+      description: info.description || 'Sin descripción disponible.',
+      subject: info.categories || [],
+      ratings_average: info.averageRating || null,
+      ratings_count: info.ratingsCount || 0,
+      page_count: info.pageCount || 0,
+      publisher: info.publisher ? [info.publisher] : []
+    };
+  }
+
+  getRecommendedBooks(): Observable<any> {
+    const params = this.buildParams({
+      q: 'bestseller',
+      maxResults: '12'
+    });
+
+    return this.http.get<any>(this.baseUrl, { params }).pipe(
+      this.retryStrategy,
+      map((res: any) => ({
+        docs: (res.items || []).map((item: any) => this.adaptGoogleBook(item))
+      })),
+      catchError((err: any) => {
+        console.error('Error obteniendo recomendados:', err);
+        return of({ docs: [] });
+      })
+    );
+  }
+
   searchBooks(query: string): Observable<any> {
-    return this.http.get<any>(
-      `${this.searchUrl}?q=${encodeURIComponent(query)}`,
+    if (!query || !query.trim()) {
+      return of({ docs: [] });
+    }
+
+    const params = this.buildParams({
+      q: encodeURIComponent(query.trim()),
+      maxResults: '20'
+    });
+
+    return this.http.get<any>(this.baseUrl, { params }).pipe(
+      this.retryStrategy,
+      map((res: any) => ({
+        docs: (res && res.items && Array.isArray(res.items))
+          ? res.items.map((item: any) => this.adaptGoogleBook(item))
+          : []
+      })),
+      catchError((err: HttpErrorResponse) => {
+        console.warn('Error o API no disponible en la búsqueda de libros:', err.status || err.message);
+        // Devuelve una lista vacía para no bloquear la interfaz del usuario
+        return of({ docs: [] });
+      })
     );
   }
 
   getBookDetails(workKey: string): Observable<any> {
-    return this.http.get<any>(`https://openlibrary.org${workKey}.json`);
-  }
+    const cleanId = workKey.replace('/works/', '').replace('.json', '');
+    const params = this.buildParams({});
 
-  getAuthor(authorKey: string): Observable<any> {
-    return this.http.get<any>(`https://openlibrary.org${authorKey}.json`);
-  }
-
-  getRecommendedBooks(): Observable<any> {
-    return this.http.get<any>(`${this.searchUrl}?q=bestseller&limit=12`);
+    return this.http.get<any>(`${this.baseUrl}/${cleanId}`, { params }).pipe(
+      this.retryStrategy,
+      map((item: any) => this.adaptGoogleBook(item)),
+      catchError((err: any) => {
+        console.error('Error al obtener detalles:', err);
+        return of(null);
+      })
+    );
   }
 
   getNewBooks(): Observable<any> {
-    return this.http.get<any>(`${this.searchUrl}?q=technology&limit=12`);
-  }
+    const params = this.buildParams({
+      q: 'technology',
+      orderBy: 'newest',
+      maxResults: '12'
+    });
 
-  getBooksByCategory(category: string) {
-    return this.http.get<any>(
-      `https://openlibrary.org/search.json?subject=${category}`,
+    return this.http.get<any>(this.baseUrl, { params }).pipe(
+      this.retryStrategy,
+      map((res: any) => ({
+        docs: (res.items || []).map((item: any) => this.adaptGoogleBook(item))
+      })),
+      catchError((err: any) => {
+        console.error('Error en libros nuevos:', err);
+        return of({ docs: [] });
+      })
     );
   }
 
-  getPopularCategory(category: string): Observable<any> {
-    return this.http.get<any>(
-      `${this.searchUrl}?subject=${encodeURIComponent(category)}&sort=rating&limit=12`,
+  getBooksByCategory(category: string): Observable<any> {
+    const params = this.buildParams({
+      q: `subject:${category}`,
+      maxResults: '12'
+    });
+
+    return this.http.get<any>(this.baseUrl, { params }).pipe(
+      this.retryStrategy,
+      map((res: any) => ({
+        docs: (res.items || []).map((item: any) => this.adaptGoogleBook(item))
+      })),
+      catchError((err: any) => {
+        console.error(`Error en categoría (${category}):`, err);
+        return of({ docs: [] });
+      })
     );
   }
 
-  getCoverUrl(coverId: number): string {
-    if (!coverId) {
-      return 'https://via.placeholder.com/150x220?text=Sin+Portada';
+  getAuthor(authorKey: string): Observable<any> {
+    return of({ name: authorKey, bio: 'Información de autor no disponible' });
+  }
+
+  getBookRatings(workId: string): Observable<any> {
+    return of({ summary: { average: 4.5, count: 10 } });
+  }
+
+  getCoverUrl(coverId: any): string {
+    if (!coverId) return 'assets/no-cover.png';
+    if (typeof coverId === 'string' && (coverId.startsWith('http://') || coverId.startsWith('https://'))) {
+      return coverId;
     }
-    return `https://covers.openlibrary.org/b/id/${coverId}-L.jpg`;
-  }
-
-  searchAuthors(query: string) {
-    return this.http.get<any>(
-      `https://openlibrary.org/search/authors.json?q=${query}`,
-    );
-  }
-
-  searchBySubject(subject: string) {
-    return this.http.get<any>(
-      `https://openlibrary.org/search.json?subject=${subject}`,
-    );
-  }
-
-   getBookRatings(workId: string) {
-    return this.http.get(`https://openlibrary.org${workId}/ratings.json`);
+    return 'assets/no-cover.png';
   }
 
   getLibrary(): any[] {
-    return JSON.parse(localStorage.getItem('biblioteca') || '[]');
+    try {
+      return JSON.parse(localStorage.getItem('biblioteca') || '[]');
+    } catch {
+      return [];
+    }
   }
 
   addToLibrary(book: any, status: string = 'Pendientes'): void {
-    let lib = this.getLibrary();
-    if (!lib.find((b) => b.key === book.key)) {
+    const lib = this.getLibrary();
+    if (!lib.find((b: any) => b.key === book.key)) {
       const bookForLibrary = {
         ...book,
         status: status,
@@ -82,9 +190,5 @@ export class BookService {
       lib.push(bookForLibrary);
       localStorage.setItem('biblioteca', JSON.stringify(lib));
     }
-  }
-
-  getEdition(editionKey: string) {
-    return this.http.get(`https://openlibrary.org/books/${editionKey}.json`);
   }
 }

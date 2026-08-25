@@ -74,6 +74,7 @@
 .category{
   display:inline-block;
   padding:6px 12px;
+  margin-left: 1em;
   background:#f1ebff;
   color:#7C4DFF;
   border-radius:8px;

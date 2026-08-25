@@ -2,51 +2,60 @@
 
   <div class="search-header">
     <button class="back-btn" routerLink="/home">
-      <img src="/arrow.png" alt="Volver" width="15px">
+      <img src="assets/arrow.png" alt="Volver" width="15px">
     </button>
 
     <input
       #searchInput
       type="text"
-      placeholder="Buscar libros"
+      placeholder="Buscar libros, autores o géneros..."
+      [value]="terminoBusqueda"
+      [(ngModel)]="terminoBusqueda" 
+      (ngModelChange)="buscar($event)"
       (keyup.enter)="buscar(searchInput.value)"
     />
     
     <button class="back-btn" (click)="buscar(searchInput.value)">
-      <img src="/lupa.png" alt="Buscar" width="20px">
+      <img src="assets/lupa.png" alt="Buscar" width="20px">
     </button>
   </div>
 
   <div class="tabs">
     <button [class.active]="selectedTab === 'all'" (click)="setTab('all')">Todos</button>
-    <button [class.active]="selectedTab === 'books'" (click)="setTab('books')">Libros</button>
+    <button [class.active]="selectedTab === 'books'" (click)="setTab('books')">Títulos</button>
     <button [class.active]="selectedTab === 'authors'" (click)="setTab('authors')">Autores</button>
     <button [class.active]="selectedTab === 'subject'" (click)="setTab('subject')">Géneros</button>
   </div>
 
   <div class="results">
-    <div *ngIf="books.length === 0" style="text-align: center; margin-top: 2rem; color: #666;">
-      <p>Buscá un título, autor o género para empezar.</p>
+    <div *ngIf="isLoading" style="text-align: center; margin-top: 2rem;">
+      <p>Cargando resultados...</p>
     </div>
 
-    <div class="result-item" *ngFor="let book of books" [routerLink]="['/book', book.key.replace('/works/', '')]">
-      <img
-        [src]="book.cover_i ? 'https://covers.openlibrary.org/b/id/' + book.cover_i + '-M.jpg' : '/portadavacia.png'"
-        [alt]="book.title"
-        class="book-cover"
-        [routerLink]="['/book', book.key.replace('/works/', '')]"
-        style="cursor: pointer;"
-      >
+    <div *ngIf="!isLoading && books.length === 0" style="text-align: center; margin-top: 2rem; color: #666;">
+      <p *ngIf="!terminoBusqueda">Buscá un título, autor o género para empezar.</p>
+      <p *ngIf="terminoBusqueda">No se encontraron resultados para "{{ terminoBusqueda }}".</p>
+    </div>
+
+    <div class="result-item" *ngFor="let book of books" [routerLink]="['/book', book.key]">
+      <img 
+        [src]="book.cover_i" 
+        [alt]="book.title" 
+        (error)="onImageError($event)" 
+        style="cursor: pointer;" />
 
       <div>
         <div class="book-info">
           <h3>{{ book.title }}</h3>
-          <p>{{ book.author_name?.[0] || 'Desconocido' }}</p>
+          <p><strong>Autor:</strong> {{ book.author_name?.[0] || 'Desconocido' }}</p>
+          <p *ngIf="book.subject?.length" class="genre-tag">
+            <small><strong>Género:</strong> {{ book.subject[0] }}</small>
+          </p>
         </div>
       
         <div>
-          <button (click)="agregarABiblioteca(book)" class="añadir-btn">
-            ➕ Libros leidos
+          <button (click)="$event.stopPropagation(); agregarABiblioteca(book)" class="añadir-btn">
+            ➕ Leídos
           </button>
         </div>
       </div>

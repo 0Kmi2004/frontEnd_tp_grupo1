@@ -142,12 +142,41 @@
   cursor: pointer;
 }
 
-.book-title {
-  margin-top: 8px;
-  font-size: 0.85rem;
-  text-align: center;
-  font-weight: 500;
+/* Contenedor del título */
+/* Contenedor del título */
+.card-book {
   width: 90px;
+  padding: 4px 8px;
+  box-sizing: border-box;
+}
+
+/* Título truncado a 1 línea con puntos suspensivos (...) */
+.book-title-truncated {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Máximo 2 líneas */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* Efecto opcional: Pausar al pasar el ratón */
+.scroll-container:hover .scroll-text {
+  animation-play-state: paused;
+}
+
+/* Animación de desplazamiento de derecha a izquierda */
+@keyframes scroll-left {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
 }
 
 .book img{

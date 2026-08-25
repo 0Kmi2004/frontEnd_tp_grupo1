@@ -1,20 +1,14 @@
 <div class="explorer-container">
 
   <header class="topbar">
-
-    <button class="icon-btn"
-    (click)="toggleMenu()">
+    <button class="icon-btn" (click)="toggleMenu()">
       ☰
     </button>
-
     <h1>Explorar</h1>
-
-
   </header>
 
-  <div class="overlay" *ngIf="menuOpen" (click)="closeMenu()">
-  </div>
-  
+  <div class="overlay" *ngIf="menuOpen" (click)="closeMenu()"></div>
+
   <aside class="side-menu" [class.open]="menuOpen">
     <div class="menu-header">
       <h2>Biblioteca Digital</h2>
@@ -22,103 +16,112 @@
         ✕
       </button>
     </div>
-  
+
     <nav class="menu-links">
-      <a routerLink="/home" (click)="closeMenu()">
-        🏠 Inicio
-      </a>
-  
       <a routerLink="/search" (click)="closeMenu()">
         🔍 Buscar
       </a>
-  
       <a routerLink="/library" (click)="closeMenu()">
-        📚 Libros leidos
+        📚 Libros leídos
       </a>
-  
       <a routerLink="/profile" (click)="closeMenu()">
         👤 Perfil
       </a>
-  
     </nav>
   </aside>
 
   <div class="search-container" routerLink="/search">
-
     <input
       type="text"
       placeholder="Buscar libros, autores, géneros..."
+      readonly
     />
-
   </div>
 
   <section class="section">
-
     <div class="section-header">
       <h2>Categorías</h2>
     </div>
 
     <div class="categories">
-
-      <button (click)="selectCategory('ficcion')">Ficción</button>
-      <button (click)="selectCategory('historia')">Historia</button>
-      <button (click)="selectCategory('ciencia')">Ciencia</button>
-      <button (click)="selectCategory('autoayuda')">Autoayuda</button>
-      <button (click)="selectCategory('romance')">Romance</button>
-      <button (click)="selectCategory('misterio')">Misterio</button>
-
+      <button 
+        [class.active]="selectedCategory === 'ficcion'" 
+        (click)="selectCategory('ficcion')">Ficción</button>
+      <button 
+        [class.active]="selectedCategory === 'historia'" 
+        (click)="selectCategory('historia')">Historia</button>
+      <button 
+        [class.active]="selectedCategory === 'ciencia'" 
+        (click)="selectCategory('ciencia')">Ciencia</button>
+      <button 
+        [class.active]="selectedCategory === 'autoayuda'" 
+        (click)="selectCategory('autoayuda')">Autoayuda</button>
+      <button 
+        [class.active]="selectedCategory === 'romance'" 
+        (click)="selectCategory('romance')">Romance</button>
+      <button 
+        [class.active]="selectedCategory === 'misterio'" 
+        (click)="selectCategory('misterio')">Misterio</button>
     </div>
-
   </section>
 
-  <section class="section">
+  <!-- Estado de Carga -->
+  <div *ngIf="isLoading" class="loading-state">
+    <p>Cargando catálogo...</p>
+  </div>
 
-    <div class="section-header">
-      <h2>Recomendados para ti</h2>
-    </div>
+  <!-- Estado de Error (Error 503 o falla de conexión) -->
+  <div *ngIf="!isLoading && hasError" class="error-state">
+    <p>El servicio de libros no está disponible en este momento.</p>
+    <button (click)="cargarDatosIniciales()">Reintentar</button>
+  </div>
 
-    <div class="books-scroll">
-
-      <div 
-      class="book"
-      *ngFor="let book of recommendedBooks"
-      [routerLink]="['/book', book.key.replace('/works/', '')]">
-        <img [src]="'https://covers.openlibrary.org/b/id/' + book.cover_i + '-M.jpg'"
-        [alt]="book.title">
-        <p class="book-title">
-          {{ book.title }}
-        </p>
+  <!-- Secciones de libros -->
+  <ng-container *ngIf="!isLoading && !hasError">
+    <section class="section">
+      <div class="section-header">
+        <h2>{{ selectedCategory ? ('Categoría: ' + selectedCategory) : 'Recomendados para ti' }}</h2>
       </div>
 
-    </div>
-
-  </section>
-
-  <section class="section">
-
-    <div class="section-header">
-      <h2>Novedades</h2>
-    </div>
-
-    <div class="books-scroll">
-
-      <div 
-      class="book"
-      *ngFor="let book of newBooks"
-      [routerLink]="['/book', book.key.replace('/works/', '')]">
-        <img [src]="'https://covers.openlibrary.org/b/id/' + book.cover_i + '-M.jpg'"
-        [alt]="book.title">
-        <p class="book-title">
-          {{ book.title }}
-        </p>
+      <div class="books-scroll" *ngIf="recommendedBooks.length > 0; else noBooks">
+        <div class="book" *ngFor="let book of recommendedBooks" [routerLink]="['/book', book.key?.replace('/works/', '')]"
+          [attr.title]="book.title">
+      
+          <img [src]="book.cover_i || 'assets/no-cover.png'" [alt]="book.title">
+          <div class="card-book">
+            <h3 class="book-title-truncated">{{ book.title }}</h3>
+          </div>
+        </div>
       </div>
 
-    </div>
+      <ng-template #noBooks>
+        <p class="empty-message">No se encontraron libros para esta sección.</p>
+      </ng-template>
+    </section>
 
-  </section>
+    <section class="section">
+      <div class="section-header">
+        <h2>Novedades</h2>
+      </div>
+
+      <div class="books-scroll" *ngIf="newBooks.length > 0">
+        <div 
+          class="book"
+          *ngFor="let book of newBooks"
+          [routerLink]="['/book', book.key?.replace('/works/', '')]">
+          <img [src]="book.cover_i || 'assets/no-cover.png'" [alt]="book.title">
+          <div class="card-book">
+            <p class="book-title-truncated">
+              {{ book.title }}
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </ng-container>
 
   <nav class="bottom-nav">
-
     <button class="active">
       🏠
       <span>Inicio</span>
@@ -126,14 +129,13 @@
 
     <button routerLink="/library">
       📚
-      <span>Libros Leidos</span>
+      <span>Libros Leídos</span>
     </button>
 
     <button routerLink="/profile">
       👤
       <span>Perfil</span>
     </button>
-
   </nav>
 
 </div>

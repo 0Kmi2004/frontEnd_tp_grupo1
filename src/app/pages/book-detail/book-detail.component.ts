@@ -15,57 +15,40 @@ export class BookDetailComponent implements OnInit {
   authorName = 'Autor desconocido';
   description = 'No hay descripción disponible.';
 
+  ratingAverage: number = 0;
+  ratingCount: number = 0;
+
   constructor(
     private route: ActivatedRoute,
     private bookService: BookService,
-    private location: Location,
+    private location: Location
   ) {}
-
-  ratingAverage: number = 0;
-  ratingCount: number = 0;
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
 
     if (!id) return;
 
-    this.bookService.getBookDetails(`/works/${id}`).subscribe({
+    this.bookService.getBookDetails(id).subscribe({
       next: (data: any) => {
+        if (!data) return;
         this.book = data;
 
-        this.bookService.getBookRatings(`/works/${id}`).subscribe({
-  next: (ratingData: any) => {
-    if (ratingData && ratingData.summary) {
-      this.ratingAverage = ratingData.summary.average 
-        ? parseFloat(ratingData.summary.average.toFixed(1)) 
-        : 0;
-      
-      this.ratingCount = ratingData.summary.count || 0;
-    }
-  },
-  error: () => {
-    console.log('No se encontraron calificaciones para este libro.');
-  }
-});
+        // Asignación de autor desde la respuesta mapeada de Google Books
+        if (Array.isArray(data.author_name) && data.author_name.length > 0) {
+          this.authorName = data.author_name.join(', ');
+        } else if (typeof data.author_name === 'string') {
+          this.authorName = data.author_name;
+        }
 
-        if (typeof data.description === 'object') {
-          this.description = data.description.value;
-        } else if (typeof data.description === 'string') {
+        // Asignación de descripción
+        if (data.description) {
           this.description = data.description;
         }
 
-        if (data.authors?.length > 0) {
-          const authorKey = data.authors[0].author.key;
-
-          this.bookService.getAuthor(authorKey).subscribe({
-            next: (author: any) => {
-              this.authorName = author.name;
-            },
-            error: () => {
-              this.authorName = 'Autor desconocido';
-            },
-          });
-        }
+        // Asignación de valoraciones (Google Books entrega rating nativo)
+        this.ratingAverage = data.ratings_average || 0;
+        this.ratingCount = data.ratings_count || 0;
       },
       error: (error) => {
         console.error('Error al obtener el libro:', error);
@@ -78,29 +61,32 @@ export class BookDetailComponent implements OnInit {
   }
 
   getSubjects(): string {
-    if (!this.book?.subjects?.length) {
+    if (!this.book?.subject?.length) {
       return 'General';
     }
-
-    return this.book.subjects.slice(0, 5).join(', ');
+    return this.book.subject.slice(0, 5).join(', ');
   }
 
   agregarBiblioteca(): void {
     if (!this.book) return;
 
-    const biblioteca = JSON.parse(localStorage.getItem('biblioteca') || '[]');
-    const existe = biblioteca.find((b: any) => b.key === this.book.key);
-
-    if (!existe) {
-      biblioteca.push({
+    this.bookService.addToLibrary(
+      {
         ...this.book,
         authorName: this.authorName,
-      });
+      },
+      'Pendientes'
+    );
 
-      localStorage.setItem('biblioteca', JSON.stringify(biblioteca));
-      alert('Libro agregado a biblioteca');
-    } else {
-      alert('El libro ya está en biblioteca');
+    alert('¡Libro agregado a tu biblioteca!');
+  }
+
+  onImageError(event: Event): void {
+    const imgElement = event.target as HTMLImageElement;
+    if (imgElement) {
+      imgElement.onerror = null;
+      imgElement.src =
+        'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="150" fill="%23ccc"><rect width="100%" height="100%"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23666" font-size="12">Sin portada</text></svg>';
     }
   }
 }
